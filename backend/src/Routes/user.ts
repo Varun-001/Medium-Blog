@@ -36,11 +36,12 @@ app.post('/signup', async (c)=>{
 
         const jwtToken = await sign(jwtPayload,secret);
 
-        // console.log("Token",token)
+        // console.log("Token",jwtToken)
 
         return c.json({jwtToken});
 
     }catch(e:any){
+        console.log("Error:-",e)
         c.status(403);
         return c.json({error: `Error while Signing Up!,${e}`})
     }
@@ -58,7 +59,8 @@ app.post('/signin', async (c)=>{
     try{
         const user = await prisma.user.findUnique({
             where: {
-                email: body.email
+                email: body.email,
+                password: body.password
             }
         });
     
@@ -76,14 +78,15 @@ app.post('/signin', async (c)=>{
     
         return c.json({jwtToken});
     }catch(e:any){
+        console.log("error:-",e)
         return c.json({error:"User not found"})
     }
 
 });
 
-app.get('/', (c)=>{
+// app.get('/', (c)=>{
 
-}) 
+// }) 
 
 
 
