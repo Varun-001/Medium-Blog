@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from "hono/jwt";
 import { JWTPayload } from "hono/utils/jwt/types";
+import {createBlogInput,updateBlogInput} from "@varung01/medium-common"
 
 const app = new Hono<{
     Bindings:{
@@ -57,6 +58,15 @@ app.post('/', async (c)=>{
     }).$extends(withAccelerate());
 
     const body = await c.req.json();
+    const {success} = createBlogInput.safeParse(body);
+
+    if(!success){
+        c.status(411)
+        return c.json({
+            message: "Inputs not correct"
+        });
+    }
+
     const userId = c.get('userId') ;
 
     try{
@@ -87,6 +97,15 @@ app.put('/', async (c)=>{
     }).$extends(withAccelerate());
 
     const body = await c.req.json();
+     const {success} = updateBlogInput.safeParse(body);
+
+    if(!success){
+        c.status(411)
+        return c.json({
+            message: "Inputs not correct"
+        });
+    }
+    
     const userId = c.get('userId') ;
 
     try{

@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { decode, sign, verify } from 'hono/jwt'
+import {signupInput, signinInput} from "@varung01/medium-common"
 
 // const app = new Hono()
 // added generic to Hono's instance
@@ -19,6 +20,14 @@ app.post('/signup', async (c)=>{
     }).$extends(withAccelerate());
 
     const body = await c.req.json();
+    const {success} = signupInput.safeParse(body);
+
+    if(!success){
+        c.status(411)
+        return c.json({
+            message: "Inputs not correct"
+        });
+    }
 
     try{
         const user = await prisma.user.create({
@@ -55,6 +64,14 @@ app.post('/signin', async (c)=>{
     }).$extends(withAccelerate());
 
     const body = await c.req.json();
+    const {success} = signinInput.safeParse(body);
+
+    if(!success){
+        c.status(411)
+        return c.json({
+            message: "Inputs not correct"
+        });
+    }
 
     try{
         const user = await prisma.user.findUnique({
