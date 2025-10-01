@@ -1,0 +1,15 @@
+{
+  "name": "@varung01/medium-common",
+  "version": "1.0.3",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "dist",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "zod": "^4.1.11"
+  }
+}
