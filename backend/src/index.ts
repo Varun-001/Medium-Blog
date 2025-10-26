@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import userRoutes from "./Routes/user"
@@ -6,6 +7,7 @@ import blogRoutes from "./Routes/blog"
 
 const app = new Hono().basePath('/api/v1');
 
+app.use('/*', cors())
 app.route('/user', userRoutes) // Handle /user
 app.route('/blog', blogRoutes) // Handle /book
 
