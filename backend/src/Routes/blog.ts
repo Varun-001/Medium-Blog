@@ -28,8 +28,7 @@ app.use('/*', async (c,next)=>{
 		return c.json({ error: "Unauthorized" });
 	}
 
-    const token = jwt?.split(' ')[1];
-    const payload = await verify(token, c.env.JWT_SECRET);
+    const payload = await verify(jwt, c.env.JWT_SECRET);
 
     if (!payload) {
         c.status(401);
@@ -142,10 +141,24 @@ app.get('/:id', async (c)=>{
         const blog = await prisma.post.findFirst({
             where:{
                 id:blogId
+            },
+            select:{
+                content:true,
+                title:true,
+                id:true,
+                author:{
+                    select:{
+                        name:true,
+                        email:true,
+                        id:true
+                    }
+                }
             }
         })
 
-        return c.json(blog)
+        return c.json({
+            blog
+        })
 
     }catch(e){
         c.status(401);
@@ -156,14 +169,26 @@ app.get('/:id', async (c)=>{
 
 // GET /api/v1/blog/bulk
 app.get('/blogs/all', async (c)=>{
-
     const prisma = new PrismaClient({
-		datasourceUrl: c.env?.DATABASE_URL	,
+		datasourceUrl: c.env.DATABASE_URL	,
 	}).$extends(withAccelerate());
 
     try{
-        const blogs = await prisma.post.findMany();
-        return c.json(blogs);
+        const blogs = await prisma.post.findMany({
+            select:{
+                content:true,
+                title:true,
+                id:true,
+                author:{
+                    select:{
+                        name:true,
+                        email:true,
+                        id:true
+                    }
+                }
+            }
+        });
+        return c.json({blogs});
     }
     catch(e){
          c.status(401);
