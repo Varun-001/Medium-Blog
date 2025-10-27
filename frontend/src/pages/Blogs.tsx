@@ -1,39 +1,42 @@
+import { AppBar } from "../components/AppBar"
 import { BlogCard } from "../components/BlogCard"
+import { BlogSkeleton } from "../components/BlogSkeleton";
+import { useBlogs } from "../hooks"
 
 export const Blogs = ()=>{
+
+    const {loading,blogs} = useBlogs();   
+
     return(
-        <div className="flex flex-col items-center justify-center">
-            <div className="max-w-xl">
-                <BlogCard
-                    authorName="Varun"
-                    title="How an Ugly Single-Page Website Makes $5000 a month with Affiliate Marketting"
-                    content="No need to create a fancy and modern website with hundreds of pages to make money online.-Making money online is the dream of a man"
-                    publishedDate="Oct 26,2025"
-                />
+        loading?
+        (<>
+            <AppBar/> 
+            <div className="flex flex-col justify-center items-center">
+                <BlogSkeleton/>
+                <BlogSkeleton/>
+                <BlogSkeleton/>
+                <BlogSkeleton/>
+                <BlogSkeleton/>
+                <BlogSkeleton/>
+                <BlogSkeleton/>
             </div>
-            <div className="flex justify-center max-w-xl">
-                <BlogCard
-                    authorName="Varun"
-                    title="How an Ugly Single-Page Website Makes $5000 a month with Affiliate Marketting"
-                    content="No need to create a fancy and modern website with hundreds of pages to make money online.-Making money online is the dream of a man"
-                    publishedDate="Oct 26,2025"
-                />
-            </div>
-            <div className="flex justify-center max-w-xl">
-                <BlogCard
-                    authorName="Varun"
-                    title="How an Ugly Single-Page Website Makes $5000 a month with Affiliate Marketting"
-                    content="No need to create a fancy and modern website with hundreds of pages to make money online.-Making money online is the dream of a man"
-                    publishedDate="Oct 26,2025"
-                />
-            </div>
-            <div className="flex justify-center max-w-xl">
-                <BlogCard
-                    authorName="Varun"
-                    title="How an Ugly Single-Page Website Makes $5000 a month with Affiliate Marketting"
-                    content="No need to create a fancy and modern website with hundreds of pages to make money online.-Making money online is the dream of a man"
-                    publishedDate="Oct 26,2025"
-                />
+        </>)
+        :
+        <div>
+            <AppBar/>
+
+            <div className="flex flex-col items-center justify-center">
+                    <div>
+                        {blogs.map(blog=>
+                            <BlogCard
+                                id={blog?.id}
+                                authorName= {blog?.author?.name}
+                                title={blog?.title}
+                                content={blog?.content}
+                                publishedDate="Oct 26,2025"
+                            />
+                        )}
+                    </div>
             </div>
         </div>
     )
